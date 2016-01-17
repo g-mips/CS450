@@ -1,0 +1,3 @@
+k = 89
+My results: 28.89%
+Better results: 28.89%

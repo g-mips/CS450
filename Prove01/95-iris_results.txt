@@ -1,0 +1,3 @@
+k = 95
+My results: 57.78%
+Better results: 57.78%

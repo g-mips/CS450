@@ -1,0 +1,3 @@
+k = 21
+My results: 83.43%
+Better results: 85.36%

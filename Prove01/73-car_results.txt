@@ -1,0 +1,3 @@
+k = 73
+My results: 89.02%
+Better results: 89.02%

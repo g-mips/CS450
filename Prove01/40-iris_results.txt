@@ -1,0 +1,3 @@
+k = 40
+My results: 48.89%
+Better results: 93.33%

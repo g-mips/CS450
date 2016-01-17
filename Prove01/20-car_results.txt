@@ -1,0 +1,3 @@
+k = 20
+My results: 85.74%
+Better results: 88.44%

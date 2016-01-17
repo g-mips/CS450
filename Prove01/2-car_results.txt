@@ -1,0 +1,3 @@
+k = 2
+My results: 91.14%
+Better results: 91.52%

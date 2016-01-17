@@ -1,0 +1,3 @@
+k = 61
+My results: 88.05%
+Better results: 88.05%

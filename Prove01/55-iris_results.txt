@@ -1,0 +1,3 @@
+k = 55
+My results: 31.11%
+Better results: 100.0%

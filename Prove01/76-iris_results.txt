@@ -1,0 +1,3 @@
+k = 76
+My results: 60.0%
+Better results: 60.0%

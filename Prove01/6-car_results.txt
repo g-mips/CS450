@@ -1,0 +1,3 @@
+k = 6
+My results: 82.85%
+Better results: 92.87%

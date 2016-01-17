@@ -1,0 +1,3 @@
+k = 48
+My results: 86.9%
+Better results: 86.9%

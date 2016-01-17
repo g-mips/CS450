@@ -1,0 +1,3 @@
+k = 33
+My results: 86.32%
+Better results: 86.71%

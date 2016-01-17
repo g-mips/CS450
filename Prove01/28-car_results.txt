@@ -1,0 +1,3 @@
+k = 28
+My results: 88.63%
+Better results: 89.02%

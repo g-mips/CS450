@@ -1,0 +1,3 @@
+k = 18
+My results: 85.93%
+Better results: 88.25%

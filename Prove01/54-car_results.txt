@@ -1,0 +1,3 @@
+k = 54
+My results: 86.71%
+Better results: 86.51%

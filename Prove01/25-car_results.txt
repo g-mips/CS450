@@ -1,0 +1,3 @@
+k = 25
+My results: 89.21%
+Better results: 89.98%

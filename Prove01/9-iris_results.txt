@@ -1,0 +1,3 @@
+k = 9
+My results: 77.78%
+Better results: 91.11%

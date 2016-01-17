@@ -1,0 +1,3 @@
+k = 30
+My results: 31.11%
+Better results: 93.33%

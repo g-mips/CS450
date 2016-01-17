@@ -1,0 +1,3 @@
+k = 13
+My results: 86.67%
+Better results: 95.56%

@@ -1,0 +1,41 @@
+When your assignment is complete, please answer the questions in this text file and upload it to I-Learn.
+
+1. Please provide the URL of your public GitHub repository.
+https://github.com/gshawm/CS450/tree/master/Prove01
+
+2. Briefly describe your overall approach to the task and highlight the most difficult part of this assignment.
+The most difficult part of this assignment was to get everything working together. What I mean by this is that I needed to know what containers needed to
+be used or what variable types were appropriate for the task at hand. The solution I came up with was crude as best but it got the job done.
+
+3. Briefly describe how you handled the distance between nominal attributes.
+This was probably the crudest part, as I simply convert a string to a number and incremented the number. If I ran across a number while in the same group,
+I would simply keep it as that number and continue counting from there.
+
+4. Briefly describe your process for handling numeric data on different scales (i.e., normalizing).
+I used NumPy's normalize method. So, in other words, I'm not sure how it did it but I know that it was normalized.
+
+5. Describe your results for the Iris data set. (For example, what level of accuracy did you see for different values of K? How did your implementation compare to existing implementations?)
+Interestingly enough, the smaller the k, the better my results were. At one point they did extremely bad compared to the existing implementation. However, after
+point 68, the results evened out again. I'm not entirely sure why this happened either.
+
+6. Describe your results for the Car data set. (For example, what level of accuracy did you see for different values of K? How did your implementation compare to existing implementations?)
+These results were completely different from the Iris set. Now I have a theory why. My implementation did just as well as the existing implementation. Except
+for when k was small, my did worse. However, I think the reason why the majority of the time there were pretty equal was because of converting nominal
+attributes to numbers. Now, most of the nominal attributes were small, med, high, etc. so it seems like making them 0, 1, 2, etc. would work well. But I
+wouldn't be surprised if that skewed the data.
+
+7. Describe anything you did to go above and beyond the minimum standard requirements.
+I did create a csv converter to see all the results in a csv file on excel and put them into a graph. Other than that, just a lot of work.
+
+8. Please select the category you feel best describes your assignment:
+A - Some attempt was made
+B - Developing, but signficantly deficient
+C - Slightly deficient, but still mostly adequate
+D - Meets requirements
+E - Shows creativity and excels above and beyond requirements
+
+D
+
+9. Provide a brief justification (1-2 sentences) for selecting that category.
+I met the requirements but I didn't try to go for much else. Frankly, because I ran out of time. However, I worked very hard to get the results I did and am
+very happy with them.

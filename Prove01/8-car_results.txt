@@ -1,0 +1,3 @@
+k = 8
+My results: 83.43%
+Better results: 91.33%

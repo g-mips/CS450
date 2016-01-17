@@ -1,0 +1,3 @@
+k = 22
+My results: 85.74%
+Better results: 87.09%

@@ -1,0 +1,3 @@
+k = 94
+My results: 24.44%
+Better results: 24.44%

@@ -1,0 +1,3 @@
+k = 15
+My results: 88.25%
+Better results: 90.56%

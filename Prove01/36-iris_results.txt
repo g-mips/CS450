@@ -1,0 +1,3 @@
+k = 36
+My results: 33.33%
+Better results: 97.78%
