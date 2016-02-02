@@ -1,0 +1,14 @@
+| 3 Classes
+|     1 : the patient should be fitted with hard contact lenses,
+|     2 : the patient should be fitted with soft contact lenses,
+|     3 : the patient should not be fitted with contact lenses.
+| class names
+
+1, 2, 3
+
+| attributes
+
+age of the patient:     1, 2, 3.
+spectacle prescription: 1, 2.
+astigmatic:             1, 2.
+tear production rate:   1, 2.

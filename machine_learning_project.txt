@@ -1,0 +1,46 @@
+Group Team Members
+Grant Merrill
+Joel Lassen
+
+High Level View
+Joel used to work for a company that had a past problem with employees stealing. Their method of stealing was to run returns through the registers, tender them as cash, and then pocket the money when reconciling the drawer at the end of the day. In an effort to help identify potential theft receipts, Joel wrote a program to filter out receipts based on given criteria (returned with cash, receipt total greater than 30 dollars, etc.). This program is primitive in nature, and fails to take into account other data sources to better identify questionable receipts. Our goal is to create a program that accounts for these other data sets, and uses Machine Learning tactics to better identify questionable receipts in a timely fashion, as to allow management time to review security camera footage.
+Example of Non-Trivial Data (Receipt)
+
+               Store #03                
+           3471 Saviers Road            
+            Oxnard, CA 93033            
+              805-486-8266              
+     Thank you for shopping with us!    
+                                        
+
+RFND HAIR SUPPORT            R-$32.99 T1
+     NATURES PLUS                       
+     097467080157                       
+                                        
+Items:-1         Subtotal     -$32.99   
+                SALES TAX      -$2.64   
+                                        
+                *** Total     -$35.63   
+                                        
+                     CASH       $0.00   
+                   Change      $35.63   
+
+                                        
+     Your Cashier Was 839 ONELIO M.     
+                                        
+     Order Online @ WWW.LASSENS.COM     
+     LASSENS SATISFACTION GUARANTEE     
+If you are not completely satisfied our 
+ Return Policy is: Returns must be made 
+ within 30 days and be accompanied by a 
+receipt and ID. Check purchases will be 
+     mailed a check within 30 days.     
+    Credit purchases will be issued     
+ to the card. Returns without a receipt 
+  MAY be issued a store credit at the   
+    managers discretion. NO RETURNS     
+         ON APPAREL, APPLIANCES         
+     BOOKS, CDs, DVDs, OR JEWELRY.      
+                                        
+ Tuesday, January 20, 2015 11:19:26 AM  
+  Reg # 302  Csh # 839  Trx #00090947  

@@ -1,92 +1,11 @@
 from sklearn import datasets
+from sklearn import tree
+
 from dataset import Dataset
-from knn_classifier import KnnClassifier
-from sklearn.neighbors import KNeighborsClassifier
+from id3 import ID3
 from sklearn.preprocessing import normalize
 
-import random
 import math
-import re
-import os
-
-
-def normalize_data():
-    # Normalize numeric data
-    pass
-
-
-def read_file_into_dataset(data_set_name):
-    target_info = []
-    target_names = []
-    target_names_dict = {}
-    target = []
-    data = []
-
-    data_file = data_set_name + ".data"
-    name_file = data_set_name + ".names"
-
-    # Be able to load datasets from text files
-    line_number = 1
-    with open(name_file) as name_info:
-        for line in name_info:
-            pattern = re.compile(r'\s+')
-            line = re.sub(pattern, '', line)
-
-            if line is not '' and line[0] is not '|':
-                if line_number is 1:
-                    target_names = line.split(',')
-                    for index in range(target_names.__len__()):
-                        target_names_dict[target_names[index]] = index
-                    line_number += 1
-                else:
-                    line = line.split(':')[1]
-                    line = line.replace('.', '').split(',')
-
-                    line_dict = {}
-                    integer = 0
-
-                    for index in range(line.__len__()):
-                        if line[index].isnumeric():
-                            line_dict[line[index]] = int(line[index])
-                            integer = int(line[index]) + 1
-                        else:
-                            line_dict[line[index]] = integer
-                            integer += 1
-
-                    target_info.append(line_dict)
-
-    with open(data_file) as data_info:
-        for line in data_info:
-            pattern = re.compile(r'\s+')
-            line = re.sub(pattern, '', line)
-
-            single_data = line.split(',')
-
-            for index in range(single_data.__len__() - 1):
-                single_data[index] = target_info[index][single_data[index]]
-
-            target.append(target_names_dict[single_data.pop()])
-            data.append(single_data)
-
-    return Dataset(data, target, target_names)
-
-
-def randomize_dataset(data):
-    """
-    Shuffles the data and it's targets and puts them in a new dataset
-    :param iris: The dataset that will be randomized
-    :return: A new dataset that contains the newly ordered data and target lists
-    """
-    data_list = []
-    target_list = []
-    index_list = list(range(0, data.data.__len__()))
-    random.shuffle(index_list)
-
-    for index in range(index_list.__len__()):
-        data_list.append(data.data[index_list[index]])
-        target_list.append(data.target[index_list[index]])
-
-    return Dataset(data_list, target_list, data.target_names)
 
 
 def split_dataset(data_set, split_percentage):
@@ -110,8 +29,8 @@ def split_dataset(data_set, split_percentage):
         testing_set_data.append([item for item in data_set.data[index]])
         testing_set_target.append(data_set.target[index])
 
-    training_set_dataset = Dataset(training_set_data, training_set_target, data_set.target_names)
-    testing_set_dataset = Dataset(testing_set_data, testing_set_target, data_set.target_names)
+    training_set_dataset = Dataset(training_set_data, training_set_target, data_set.target_names, data_set.feature_names)
+    testing_set_dataset = Dataset(testing_set_data, testing_set_target, data_set.target_names, data_set.feature_names)
 
     return { 'train': training_set_dataset, 'test': testing_set_dataset }
 
@@ -131,51 +50,66 @@ def get_accuracy(predictions, actuals):
     return round((count / actuals.__len__()) * 100, 2)
 
 
-def write_to_results_file(file, data, k):
+def write_to_results_file(file, data):
     with open(file, mode='a') as results:
         results.write(data)
 
 
-def main(k, data_set_name=None):
-    split_percentage = 0.7
+def main():
+    while True:
+        data_set_name = input("Please provide the name of the data set you want to work with: ")
 
-    # Load dataset
-    if data_set_name is not None:
-        data_set = read_file_into_dataset("C:\\Users\\Grant\\Documents\\School\\Winter 2016\\CS 450\\Prove01\\" + data_set_name)
-        data_set = randomize_dataset(data_set)
-    else:
-        data_set_name = "iris"
-        iris = datasets.load_iris()
-        data_set = randomize_dataset(iris)
+        # Load, Randomize, Normalize, Discretize Dataset
+        data_set = Dataset()
+        data_set.read_file_into_dataset("C:\\Users\\Grant\\Documents\\School\\Winter 2016\\CS 450\\Prove03\\" + data_set_name)
+        data_set.randomize()
+        data_set.data = normalize(data_set.data)
+        data_set.discretize()
 
-    data_set.data = normalize(data_set.data)
-    data_sets    = split_dataset(data_set, split_percentage)
-    training_set = data_sets['train']
-    testing_set  = data_sets['test']
+        data_set.set_missing_data()
+        # Split Dataset
+        split_percentage = 0.7
+        data_sets    = split_dataset(data_set, split_percentage)
+        training_set = data_sets['train']
+        testing_set  = data_sets['test']
 
-    # My Classifier
-    knnClassifier = KnnClassifier()
-    knnClassifier.k = k
-    knnClassifier.train(training_set.data, training_set.target, training_set.target_names)
-    predictions = knnClassifier.predict(testing_set.data)
+        # Create Custom Classifier, Train Dataset, Predict Target From Testing Set
+        id3Classifier = ID3()
+        id3Classifier.train(training_set)
+        predictions = id3Classifier.predict(testing_set)
 
-    my_accuracy = get_accuracy(predictions, testing_set.target)
+        id3Classifier.display_tree(0, id3Classifier.tree)
+        # Check Results
+        my_accuracy = get_accuracy(predictions, testing_set.target)
+        print("Accuracy: " + str(my_accuracy) + "%")
 
-    # Better Classifier
-    better_classifier = KNeighborsClassifier(n_neighbors=k)
-    better_classifier.fit(training_set.data, training_set.target)
-    predictions = better_classifier.predict(testing_set.data)
+        # Compare To Existing Implementations
+        dtc = tree.DecisionTreeClassifier()
+        dtc.fit(training_set.data, training_set.target)
+        predictions = dtc.predict(testing_set.data)
 
-    better_accuary = get_accuracy(predictions, testing_set.target)
+        dtc_accuracy = get_accuracy(predictions, testing_set.target)
+        print("DTC Accuracy: " + str(dtc_accuracy) + "%")
 
-    print("My results: " + str(my_accuracy) + "%")
-    print("Better results: " + str(better_accuary) + "%")
+        # Do another or not
+        toContinue = False
 
-    results = "k = " + str(k) + "\nMy results: " + str(my_accuracy) + "%\n" + "Better results: " + str(better_accuary) + "%\n"
+        while True:
+            another = input("Do you want to examine another dataset? (y / n) ")
 
-    write_to_results_file(os.getcwd() + os.sep + ".." + os.sep + str(k) + "-" + data_set_name + "_results.txt", results, k)
+            if another != 'y' and another != 'n':
+                print("Please provide you answer in a 'y' or 'n' format.")
+            elif another == 'y':
+                toContinue = True
+                break
+            else:
+                toContinue = False
+                break
 
+        if not toContinue:
+            break
 
-for k in range(1, 106):
-    main(k, "car")
-    main(k)
+# Produce a textual view of your resulting tree ASK
+
+if __name__ == '__main__':
+    main()

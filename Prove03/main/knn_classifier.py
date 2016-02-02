@@ -5,25 +5,12 @@ from classifier import Classifier
 
 
 class KnnClassifier(Classifier):
-    training_set = None
     k = 3
 
     def __init__(self):
         super().__init__()
 
-    def train(self, data, target, target_names):
-        """
-        Trains the classifier to be knowledgeable of this type of data.
-        :param data: data set to train on
-        :param target: target class
-        :param target_names: target names
-        """
-        if self.training_set is None:
-            self.training_set = Dataset(data, target, target_names)
-        else:
-            self.training_set.add_to_data(data, target, target_names)
-
-    def predict(self, instances: list):
+    def predict(self, instances):
         """
         Predicts the classes of the instances given by using the knn algorithm.
         :param instances: data that is being tested
