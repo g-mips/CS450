@@ -1,11 +1,9 @@
-from sklearn import datasets
 from sklearn import tree
+from sklearn.preprocessing import normalize
+import math
 
 from dataset import Dataset
-from id3 import ID3
-from sklearn.preprocessing import normalize
-
-import math
+from neural_network import NeuralNetwork
 
 
 def split_dataset(data_set, split_percentage):
@@ -61,7 +59,7 @@ def main():
 
         # Load, Randomize, Normalize, Discretize Dataset
         data_set = Dataset()
-        data_set.read_file_into_dataset("C:\\Users\\Grant\\Documents\\School\\Winter 2016\\CS 450\\Prove03\\" + data_set_name)
+        data_set.read_file_into_dataset("C:\\Users\\Grant\\Documents\\School\\Winter 2016\\CS 450\\Neural\\" + data_set_name)
         data_set.randomize()
         data_set.data = normalize(data_set.data)
         data_set.discretize()
@@ -75,11 +73,10 @@ def main():
         testing_set  = data_sets['test']
 
         # Create Custom Classifier, Train Dataset, Predict Target From Testing Set
-        id3Classifier = ID3()
-        id3Classifier.train(training_set)
-        predictions = id3Classifier.predict(testing_set)
-
-        id3Classifier.display_tree(0, id3Classifier.tree)
+        neuralNetwork = NeuralNetwork()
+        neuralNetwork.create_layered_network([4])
+        neuralNetwork.train(training_set)
+        predictions = neuralNetwork.predict(testing_set)
 
         # Check Results
         my_accuracy = get_accuracy(predictions, testing_set.target)

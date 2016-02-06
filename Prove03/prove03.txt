@@ -1,0 +1,238 @@
+When your assignment is complete, please answer the questions in this text file and upload it to I-Learn.
+
+1. Please provide a link to your classifier in your public GitHub repo.
+https://github.com/gshawm/CS450/tree/master/Prove03
+
+2. Briefly describe your overall approach to the task and highlight the most difficult part of this assignment.
+
+I have a couple of different classes to handle the different parts of the algorithm. First, the Dataset class contains how to read in the datasets,
+has the ability to add more data, handles missing data, knows how to discretize the data, and can read the data. I decided to have a uniform format for the
+different types of files. They all had to have the name of their data-set. There HAD to exist a .data and a .names file. The .data file contained the information
+of the actually data. The .names file contain the classes names and the attributes. The attributes are written in the same order that they appear in the .data
+file. Also, the classes are at the end of each row in the .data file. Any line that has a '|' is a comment and is ignored. The .numeric file was optional and
+is used to handle nominal data. If a dataset has nominal data, it needed to be turned into numbers. This explains what each attributes' options will translate
+to in terms of numbers. While the data is being read in, missing data is handled. More information about this is found in question 4. 
+After the data and the information regarding the data was read in, the data would be randomized, normalized, and discretized. After those operations are
+performed, more handling of missing data, which can be found in question 4, happens.
+
+Now the data is all ready to be trained and predicted. It is trained by recursively calling the id3 algorithm. A new dataset is passed in every time the
+function is called. If there are no more data or features to work with, return the most common target value. If there is only one target left, return that
+target. If these two cases don't evaluate to true, then let's create more of the tree. The information gain is then calculated but the total entropy is left out
+of the equation, as that shouldn't affect what we are looking for. The greatest gain is found and that determines the best feature to use for the next part of
+the tree. Then the dataset is created by taking away the best feature. This is used for the subtree. This process is repeated until all avenues have been 
+routed.
+
+The hardest part was getting all the data to actually work with each other and how to handle the missing data.
+
+3. Briefly describe how you handled numeric data.
+
+All numeric data was discretized. This was done by using numpy to create 'X' number of bins. This allowed me to represent continuous numbers as bins instead
+of continuous numbers. The process of discretization makes the information appear differently when the trees are printed. This is because the data is now
+in 'bins' that represent data that is close to each other. 
+
+4. Briefly describe your you handled missing data.
+
+When the dataset is read in, it takes note of where any and all '?' are located in the data by using a dictionary. However, it changes the data to 0 so that
+normalization and discretization functions can handle that data. After the data has been normalized and discretized, then the missing data is changed to -1.
+This is because there will be no data in represented by -1 and when the tree is being created, I can use this to simply ignore that point. This way missing
+data is being misrepresented.
+
+5. Describe your results for the Iris data set. (e.g., What was the size of the tree? How did your implementation compare to existing implementations? How did your decision tree compare to your kNN classifier)
+
+The Iris data set was one of the better results. In fact, most of the time, the accuracy was above 90 and the same as the sklearn DecisionTree implementation.
+The decision tree was usually a little worse than the kNN classifier but not by much. Sometimes it would do better than the kNN classifier. The tree that was
+created was about 5-9 levels in, depending on how you count.
+
+6. Include a textual representation of the tree your algorithm produced for the iris dataset.
+
+sepallength(cm)
+	8.0
+		sepalwidth(cm)
+			4.0
+				petallength(cm)
+					3.0: Iris-setosa
+					5.0: Iris-versicolor
+			5.0: Iris-setosa
+			6.0: Iris-setosa
+	6.0: Iris-virginica
+	7.0
+		sepalwidth(cm)
+			3.0
+				petalwidth(cm)
+					2.0
+						petallength(cm)
+							5.0: Iris-versicolor
+							6.0: Iris-virginica
+					3.0: Iris-virginica
+			4.0
+				petalwidth(cm)
+					2.0
+						petallength(cm)
+							5.0: Iris-versicolor
+							6.0: Iris-virginica
+					3.0: Iris-virginica
+			5.0: Iris-setosa
+			6.0: Iris-setosa
+
+7. Describe your results for the Lenses data set. (e.g., What was the size of the tree? How did your implementation compare to existing implementations?)
+
+The Lenses dataset was awful. It ranged from 12.5% - 87.5%. It was all dependent on how the sets were randomized. The tree that is represented in question 8
+is the best results I acheived (87.5%). However, it was VERY rare to achieve this. I found that while my results were most of the time relatively low, the
+existing implementation of sklearn was usually 50% - 100%. This tells me that my implementation has some work. However, knowing that the sklearn implementation
+did reach 50% sometimes, I feel that if there were more data in the Lenses data set, I would get MUCH better results.
+
+8. Include a textual representation of the tree your algorithm produced for the Lenses dataset.
+
+spectacleprescription
+	3.0
+		tearproductionrate
+			3.0: 3
+			5.0
+				ageofthepatient
+					7.0
+						astigmatic
+							3.0: 3
+							5.0: 1
+			6.0
+				ageofthepatient
+					3.0: 1
+					6.0: 2
+	4.0: 3
+	5.0
+		tearproductionrate
+			3.0: 3
+			5.0
+				ageofthepatient
+					3.0: 1
+					5.0
+						astigmatic
+							3.0: 2
+							5.0: 3
+					7.0: 2
+	6.0
+		ageofthepatient
+			3.0
+				astigmatic
+					3.0: 2
+					6.0: 3
+			6.0: 3
+	7.0: 3
+
+9. Describe your results for the Voting data set. (e.g., What was the size of the tree? How did your implementation compare to existing implementations?)
+
+The Voting data set was very promising. However, I am very curious to how the missing data was affecting the results. The usually accuracy was between
+79-95%. There was one magical moment that I did get 100%. In this instance (surprisingly), the sklearn implementation did not get 100%. But besides
+that anomaly, my implementation was usually less than the sklearn implementation, but not by much. The tree was VERY big. Thus why there is only a portion
+of the tree there. I tried to grab some of the deeper parts of the tree as well as the beginning. Hope you enjoy!
+
+10. Include ___a portion of___ the representation of the tree your algorithm produced for the Voting dataset.
+
+immigration
+	1.0
+		water-project-cost-sharing
+			1.0
+				synfuels-corporation-cutback
+					1.0
+						duty-free-exports
+							1.0
+								export-administration-act-south-africa
+									1.0
+										handicapped-infants
+											1.0
+												adoption-of-the-budget-resolution
+													1.0
+														physician-fee-freeze
+															1.0
+																el-salvador-aid
+																	1.0
+																		religious-groups-in-schools
+																			1.0
+																				anti-satellite-test-ban
+																					1.0
+																						aid-to-nicaraguan-contras
+																							1.0
+																								education-spending
+																									1.0
+																										superfund-right-to-sue
+																											1.0
+																												crime
+																													1.0
+																														mx-missile
+																															1.0: republican
+																															10.0: democrat
+													4.0: democrat
+											5.0: republican
+			2.0
+				anti-satellite-test-ban
+					1.0
+						synfuels-corporation-cutback
+							2.0
+								handicapped-infants
+									2.0: republican
+									4.0: democrat
+					4.0: democrat
+	2.0
+		water-project-cost-sharing
+			1.0
+				synfuels-corporation-cutback
+					1.0: democrat
+					2.0
+						handicapped-infants
+							1.0: republican
+							2.0
+								adoption-of-the-budget-resolution
+									2.0: republican
+									4.0: democrat
+							3.0
+								aid-to-nicaraguan-contras
+									3.0
+										superfund-right-to-sue
+											3.0
+												export-administration-act-south-africa
+													3.0
+														adoption-of-the-budget-resolution
+															2.0: republican
+															3.0: democrat
+[ CONTINUE ... ]
+									3.0
+										religious-groups-in-schools
+											2.0
+												el-salvador-aid
+													2.0
+														anti-satellite-test-ban
+															3.0
+																aid-to-nicaraguan-contras
+																	3.0
+																		mx-missile
+																			3.0
+																				education-spending
+																					1.0: democrat
+																					2.0
+																						superfund-right-to-sue
+																							2.0
+																								export-administration-act-south-africa
+																									3.0
+																										synfuels-corporation-cutback
+																											2.0
+																												physician-fee-freeze
+																													2.0: democrat
+																													3.0: republican
+																											3.0: democrat
+[ CONTINUE ... ]
+
+11. If applicable, please describe anything you did to go above and beyond and the results you saw.
+
+I didn't really do anything else above and beyond.
+
+12. Please select the category you feel best describes your assignment:
+A - Some attempt was made
+B - Developing, but signficantly deficient
+C - Slightly deficient, but still mostly adequate
+D - Meets requirements
+E - Shows creativity and excels above and beyond requirements
+
+(D)
+
+13. Provide a brief justification (1-2 sentences) for selecting that category.
+I feel that I deserve the 'D' category (but not grade ;) haha) because I did everything that was required of me.
+

@@ -1,0 +1,10 @@
+| class names
+
+Iris-setosa, Iris-versicolor, Iris-virginica
+
+| attributes
+
+sepal length (cm): continuous.
+sepal width (cm):  continuous.
+petal length (cm): continuous.
+petal width (cm):  continuous.
