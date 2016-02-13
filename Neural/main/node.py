@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 
 class Node(object):
@@ -7,6 +8,7 @@ class Node(object):
     output = 0
     weights = []
     threshold = 0
+    error = 0
 
     def __init__(self):
         pass
@@ -19,7 +21,5 @@ class Node(object):
         self.weights = np.random.ranf(self.inputs.__len__()) - 0.5
 
     def activation_function(self, total):
-        if total > self.threshold:
-            output = 1
-        else:
-            output = 0
+        self.output = 1 / (1 + math.e**(-1*total))
+

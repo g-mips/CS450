@@ -74,7 +74,7 @@ def main():
 
         # Create Custom Classifier, Train Dataset, Predict Target From Testing Set
         neuralNetwork = NeuralNetwork()
-        neuralNetwork.create_layered_network([4])
+        neuralNetwork.create_layered_network([4, 3, 3], training_set)
         neuralNetwork.train(training_set)
         predictions = neuralNetwork.predict(testing_set)
 
