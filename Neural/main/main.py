@@ -1,52 +1,11 @@
-from sklearn import tree
 from sklearn.preprocessing import normalize
-import math
+from sknn.mlp import Classifier, Layer
+import numpy as np
 
 from dataset import Dataset
 from neural_network import NeuralNetwork
-
-
-def split_dataset(data_set, split_percentage):
-    """
-    Creates a training set and a testing set based on the data set given. Splits the sets by 70/30 respectively
-    :param data_set: The dataset that will be split
-    :return: Returns a tuple holding the training and testing sets
-    """
-    length = data_set.data.__len__()
-    top_training_index = math.floor(length * split_percentage)
-    training_set_data = []
-    training_set_target = []
-    testing_set_data = []
-    testing_set_target  = []
-
-    for index in range(0, top_training_index):
-        training_set_data.append([item for item in data_set.data[index]])
-        training_set_target.append(data_set.target[index])
-
-    for index in range(top_training_index, length):
-        testing_set_data.append([item for item in data_set.data[index]])
-        testing_set_target.append(data_set.target[index])
-
-    training_set_dataset = Dataset(training_set_data, training_set_target, data_set.target_names, data_set.feature_names)
-    testing_set_dataset = Dataset(testing_set_data, testing_set_target, data_set.target_names, data_set.feature_names)
-
-    return { 'train': training_set_dataset, 'test': testing_set_dataset }
-
-
-def get_accuracy(predictions, actuals):
-    """
-    Trains the classifier with the given training set and predicts using the testing set.
-    :param data_sets: A tuple that holds the training set in spot 0 and the testing set in spot 1
-    :return: return the accuracy as a percentage
-    """
-    count = 0
-
-    for index in range(actuals.__len__()):
-        if int(predictions[index]) is int(actuals[index]):
-            count += 1
-
-    return round((count / actuals.__len__()) * 100, 2)
-
+from classifier import get_accuracy
+from csv_complier import create_csv_file
 
 def write_to_results_file(file, data):
     with open(file, mode='a') as results:
@@ -62,19 +21,31 @@ def main():
         data_set.read_file_into_dataset("C:\\Users\\Grant\\Documents\\School\\Winter 2016\\CS 450\\Neural\\" + data_set_name)
         data_set.randomize()
         data_set.data = normalize(data_set.data)
-        data_set.discretize()
+        #data_set.discretize()
+        #print(data_set.data)
 
         data_set.set_missing_data()
 
         # Split Dataset
         split_percentage = 0.7
-        data_sets    = split_dataset(data_set, split_percentage)
-        training_set = data_sets['train']
-        testing_set  = data_sets['test']
+        data_sets    = data_set.split_dataset(split_percentage)
+        training_set = data_sets[0]
+        testing_set  = data_sets[1]
 
         # Create Custom Classifier, Train Dataset, Predict Target From Testing Set
-        neuralNetwork = NeuralNetwork()
-        neuralNetwork.create_layered_network([4, 3, 3], training_set)
+        iterations = int(input("How many iterations do you want to do? "))
+        layers = int(input("How many layers do you want in your neural network? "))
+        num_nodes = []
+        for i in range(layers):
+            if i + 1 == layers:
+                number = int(input("How many nodes on the output layer? "))
+            else:
+                number = int(input("How many nodes on the " + str(i) + " layer? "))
+            num_nodes.append(number)
+
+        neuralNetwork = NeuralNetwork(iterations)
+        neuralNetwork.create_layered_network(num_nodes, training_set.feature_names.__len__())
+        #neuralNetwork.display_network()
         neuralNetwork.train(training_set)
         predictions = neuralNetwork.predict(testing_set)
 
@@ -83,13 +54,21 @@ def main():
         print("Accuracy: " + str(my_accuracy) + "%")
 
         # Compare To Existing Implementations
-        dtc = tree.DecisionTreeClassifier()
-        dtc.fit(training_set.data, training_set.target)
-        predictions = dtc.predict(testing_set.data)
+        layers_objs = []
+        for i in range(layers):
+            if i + 1 == layers:
+                layers_objs.append(Layer("Softmax", units=num_nodes[i]))
+            else:
+                layers_objs.append(Layer("Sigmoid", units=num_nodes[i]))
 
-        dtc_accuracy = get_accuracy(predictions, testing_set.target)
-        print("DTC Accuracy: " + str(dtc_accuracy) + "%")
+        mlp_nn = Classifier(layers=layers_objs, learning_rate=0.4, n_iter=iterations)
+        mlp_nn.fit(np.array(training_set.data), np.array(training_set.target))
+        predictions = mlp_nn.predict(np.array(testing_set.data))
 
+        mlp_nn_accuracy = get_accuracy(predictions, testing_set.target)
+        print("NN Accuracy: " + str(mlp_nn_accuracy) + "%")
+
+        create_csv_file(neuralNetwork.accuracies, "C:\\Users\\Grant\\Documents\\School\\Winter 2016\\CS 450\\Neural\\" + data_set_name + ".csv")
         # Do another or not
         toContinue = False
 

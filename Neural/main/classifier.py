@@ -1,13 +1,27 @@
-from dataset import Dataset
+def get_accuracy(predictions, actuals):
+    """
+    Trains the classifier with the given training set and predicts using the testing set.
+    :param data_sets: A tuple that holds the training set in spot 0 and the testing set in spot 1
+    :return: return the accuracy as a percentage
+    """
+    count = 0
+
+    for index in range(actuals.__len__()):
+        if int(predictions[index]) is int(actuals[index]):
+            count += 1
+
+    return round((count / actuals.__len__()) * 100, 2)
+
 
 class Classifier(object):
     """
     A classifier that can be trained to understand a certain dataset and can predict new data given to it.
     """
-    training_set = None
 
     def __init__(self):
-        pass
+        self.training_set   = None
+        self.testing_set    = None
+        self.validation_set = None
 
     def train(self, dataset):
         """

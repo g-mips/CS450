@@ -2,6 +2,7 @@ import re
 import random
 import numpy as np
 import os
+import math
 
 class Dataset(object):
     """
@@ -59,6 +60,32 @@ class Dataset(object):
         self.data = data_list
         self.target = target_list
 
+    def split_dataset(self, split_percentage):
+        """
+        Creates a training set and a testing set based on the data set given. Splits the sets by 70/30 respectively
+        :param data_set: The dataset that will be split
+        :return: Returns a tuple holding the training and testing sets
+        """
+        length = self.data.__len__()
+        top_training_index = math.floor(length * split_percentage)
+        set_1_data = []
+        set_1_target = []
+        set_2_data = []
+        set_2_target  = []
+
+        for index in range(0, top_training_index):
+            set_1_data.append([item for item in self.data[index]])
+            set_1_target.append(self.target[index])
+
+        for index in range(top_training_index, length):
+            set_2_data.append([item for item in self.data[index]])
+            set_2_target.append(self.target[index])
+
+        set_1_dataset = Dataset(set_1_data, set_1_target, self.target_names, self.feature_names)
+        set_2_dataset = Dataset(set_2_data, set_2_target, self.target_names, self.feature_names)
+
+        return [ set_1_dataset, set_2_dataset ]
+
     def read_file_into_dataset(self, data_set_name):
         """
 
@@ -86,6 +113,8 @@ class Dataset(object):
                         single_data[index] = 0
 
                 self.target.append(target_names_dict[single_data.pop()])
+                for i in range(single_data.__len__()):
+                    single_data[i] = float(single_data[i])
                 self.data.append(single_data)
 
     def __read_names_file(self, data_set_name):
